@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Porumb_Denisa_Lab2.Data;
 using Porumb_Denisa_Lab2.Models;
 
-namespace Porumb_Denisa_Lab2.Pages.Books
+namespace Porumb_Denisa_Lab2.Pages.Categories
 {
     public class DetailsModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace Porumb_Denisa_Lab2.Pages.Books
             _context = context;
         }
 
-        public Book Book { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,15 +28,14 @@ namespace Porumb_Denisa_Lab2.Pages.Books
                 return NotFound();
             }
 
-
-            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
-            if (book == null)
+            var category = await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+            if (category == null)
             {
                 return NotFound();
             }
             else
             {
-                Book = book;
+                Category = category;
             }
             return Page();
         }
