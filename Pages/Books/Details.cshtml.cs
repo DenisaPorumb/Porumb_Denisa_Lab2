@@ -20,7 +20,7 @@ namespace Porumb_Denisa_Lab2.Pages.Books
         }
 
         public Book Book { get; set; } = default!;
-
+        public List<Category> Categories { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -29,7 +29,12 @@ namespace Porumb_Denisa_Lab2.Pages.Books
             }
 
 
-            var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
+            var book = await _context.Book
+                .Include(b => b.Author)
+                .Include(b => b.BookCategories)
+                .ThenInclude(bc => bc.Category)
+                .FirstOrDefaultAsync(m => m.ID == id);
+
             if (book == null)
             {
                 return NotFound();
@@ -38,6 +43,7 @@ namespace Porumb_Denisa_Lab2.Pages.Books
             {
                 Book = book;
             }
+            Categories = Book.BookCategories.Select(bc => bc.Category).ToList();
             return Page();
         }
     }
